@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Client Portal — Averon</title>
+  <meta name="theme-color" content="#070B14">
+  <style>
+    body{margin:0; font-family:system-ui; background:#070B14; color:#EEF3FF; padding:24px}
+    a{color:#EEF3FF}
+    .box{max-width:760px; margin:0 auto; padding:18px; border:1px solid rgba(255,255,255,.14); border-radius:16px; background: rgba(255,255,255,.04)}
+    button{padding:10px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color:#EEF3FF; cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Client Portal</h1>
+    <p>This is a placeholder. Next: add dashboards, candidate pipeline, weekly updates, documents.</p>
+    <button id="logout">Log out</button>
+  </div>
+
+  <script>
+    // Basic gate (still not secure)
+    if (localStorage.getItem("averon_logged_in") !== "true") {
+      window.location.href = "/login.html";
+    }
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("averon_logged_in");
+      window.location.href = "/login.html";
+    });
+  </script>
+</body>
+</html>
