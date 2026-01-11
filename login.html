@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Averon Search Partners</title>
+  <meta name="description" content="Client login — Averon Search Partners." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="1024x1024" href="/Averon-Search-Partners-Logo.png">
+  <link rel="apple-touch-icon" sizes="1024x1024" href="/Averon-Search-Partners-Logo.png">
+  <meta name="theme-color" content="#070B14">
+
+  <style>
+    :root{
+      --bg0:#070B14;
+      --bg1:#0B1220;
+      --panel:rgba(255,255,255,.04);
+      --panel2:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --text:#EEF3FF;
+      --muted:#B7C4E3;
+      --gold:#C7A35B;
+      --gold2:#E6D1A1;
+      --shadow: 0 22px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 24px;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
+      --max: 1120px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background: linear-gradient(180deg, var(--bg0), var(--bg1));
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width:var(--max); margin:0 auto; padding:0 20px}
+
+    /* Background video */
+    .page{
+      min-height:100vh;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .bg-video{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      z-index:0;
+      transform: scale(1.02);
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .overlay{
+      position:absolute; inset:0;
+      z-index:1;
+      background:
+        radial-gradient(900px 500px at 15% 15%, rgba(199,163,91,.14), transparent 55%),
+        linear-gradient(180deg, rgba(7,11,20,.88), rgba(7,11,20,.62) 50%, rgba(7,11,20,.90));
+    }
+
+    /* Top bar */
+    .topbar{
+      position:relative; z-index:2;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      backdrop-filter: blur(12px);
+      background: rgba(7,11,20,.55);
+    }
+    .top-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{
+      display:flex; flex-direction:column; line-height:1.05;
+      min-width:220px;
+    }
+    .brand strong{
+      font-family:var(--serif);
+      letter-spacing:.6px;
+      font-size:16px;
+    }
+    .brand span{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: rgba(199,163,91,.95);
+      margin-top: 2px;
+    }
+
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:12px 16px; border-radius:999px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      box-shadow: 0 10px 25px rgba(0,0,0,.25);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      font-weight:600;
+      white-space:nowrap;
+      cursor:pointer;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(199,163,91,.55)}
+    .btn.primary{
+      border-color: rgba(199,163,91,.5);
+      background:linear-gradient(180deg, rgba(199,163,91,.24), rgba(255,255,255,.04));
+    }
+
+    /* Center card */
+    .main{
+      position:relative; z-index:2;
+      flex:1;
+      display:grid;
+      place-items:center;
+      padding: 42px 0;
+    }
+    .card{
+      width:min(520px, 92vw);
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding: 24px;
+      backdrop-filter: blur(10px);
+    }
+    .kicker{
+      font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+      color:rgba(199,163,91,.9);
+    }
+    h1{
+      margin:10px 0 0;
+      font-family:var(--serif);
+      font-size: 34px;
+      line-height: 1.08;
+      letter-spacing: .3px;
+    }
+    p{margin:10px 0 0; color: rgba(183,196,227,.95)}
+    form{margin-top:16px; display:grid; gap:12px}
+    label{font-size:12px; color: rgba(183,196,227,.95)}
+    input{
+      width:100%;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      padding: 12px 12px;
+      outline:none;
+      font-size: 14px;
+    }
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:4px}
+    .fine{
+      font-size:12px;
+      color: rgba(183,196,227,.88);
+      margin-top: 10px;
+    }
+    .error{
+      display:none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,120,120,.35);
+      background: rgba(255,120,120,.08);
+      color: rgba(255,220,220,.95);
+      font-size: 13px;
+    }
+
+    footer{
+      position:relative; z-index:2;
+      padding: 18px 0 26px;
+      color: rgba(183,196,227,.90);
+      font-size: 12px;
+      text-align:center;
+    }
+
+    @media (max-width: 560px){
+      .row{grid-template-columns: 1fr}
+      h1{font-size: 30px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <video class="bg-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+      <source src="/nyc-hero.mp4" type="video/mp4">
+    </video>
+    <div class="overlay" aria-hidden="true"></div>
+
+    <div class="topbar">
+      <div class="container top-inner">
+        <div class="brand">
+          <strong>Averon Search Partners</strong>
+          <span>Client Access</span>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+          <a class="btn" href="/index.html">Back to site</a>
+          <a class="btn" href="mailto:infoaveron@gmail.com">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <main class="main">
+      <div class="card">
+        <div class="kicker">Secure portal</div>
+        <h1>Client Login</h1>
+        <p>Enter your credentials to access your search dashboard.</p>
+
+        <!-- DEMO ONLY: client-side check -->
+        <form id="loginForm">
+          <div class="row">
+            <div>
+              <label for="loginId">Login ID</label><br/>
+              <input id="loginId" name="loginId" type="text" placeholder="e.g., client@company.com" required />
+            </div>
+            <div>
+              <label for="password">Password</label><br/>
+              <input id="password" name="password" type="password" placeholder="••••••••" required />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn primary" type="submit">Sign in</button>
+            <a class="btn" href="https://www.linkedin.com/company/averon-search-partners" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+
+          <div id="err" class="error">Invalid login. Please try again or email infoaveron@gmail.com.</div>
+          <div class="fine">Need access? Email <a href="mailto:infoaveron@gmail.com">infoaveron@gmail.com</a>.</div>
+        </form>
+      </div>
+    </main>
+
+    <footer>
+      © <span id="year"></span> Averon Search Partners • Averon Holding Co.
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ⚠️ DEMO ONLY — NOT SECURE.
+    // For real login, use Netlify Identity / Auth0 / Firebase.
+    const DEMO_USER = "client";
+    const DEMO_PASS = "averon";
+
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const id = document.getElementById("loginId").value.trim().toLowerCase();
+      const pw = document.getElementById("password").value;
+
+      const ok = (id === DEMO_USER || id === (DEMO_USER + "@example.com")) && pw === DEMO_PASS;
+
+      if (!ok) {
+        document.getElementById("err").style.display = "block";
+        return;
+      }
+
+      document.getElementById("err").style.display = "none";
+      // Set a simple "session" flag (still not secure)
+      localStorage.setItem("averon_logged_in", "true");
+      window.location.href = "/portal.html";
+    });
+  </script>
+</body>
+</html>
