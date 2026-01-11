@@ -112,23 +112,6 @@
       gap:14px; padding:14px 0;
     }
     .brand{display:flex; align-items:center; gap:12px; min-width:220px}
-    .mark{
-      width:36px; height:36px; border-radius:12px;
-      background:
-        radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.25), transparent 60%),
-        linear-gradient(180deg, rgba(199,163,91,.35), rgba(255,255,255,.05));
-      border:1px solid rgba(199,163,91,.35);
-      position:relative;
-    }
-    .mark:before{
-      content:"";
-      position:absolute; inset:9px 11px;
-      border-left:2px solid rgba(238,243,255,.9);
-      border-right:2px solid rgba(238,243,255,.9);
-      transform: skewX(-12deg);
-      border-radius: 3px;
-      opacity:.9;
-    }
     .brand-title{display:flex; flex-direction:column; line-height:1.05}
     .brand-title strong{
       font-family:var(--serif);
@@ -272,10 +255,9 @@
     .cta{
       padding: 26px;
       border-radius: var(--radius2);
-      border:1px solid rgba(199,163,91,.25);
-      background:
-        radial-gradient(520px 220px at 18% 12%, rgba(199,163,91,.20), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.10);
+      /* removed the gold/yellow radial glow — now matches site background/panels */
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
     }
     form{
       display:grid;
@@ -328,7 +310,7 @@
   <div class="nav" id="top">
     <div class="container nav-inner">
       <div class="brand">
-        <div class="mark" aria-hidden="true"></div>
+        <!-- removed the “weird logo” block (.mark) -->
         <div class="brand-title">
           <strong>Averon Search Partners</strong>
           <span>Executive Search</span>
@@ -347,7 +329,6 @@
 
   <!-- HERO (NYC VIDEO BACKGROUND) -->
   <section class="hero">
-    <!-- If your NYC video file is named differently, change /hero-video.mp4 below -->
     <video class="hero-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
       <source src="/nyc-hero.mp4" type="video/mp4">
     </video>
@@ -524,7 +505,8 @@
 
           <div class="form-actions">
             <button class="btn primary" type="submit">Send</button>
-            <a class="btn" href="mailto:hello@Averonsearch.com">Email: hello@Averonsearch.com</a>
+            <a class="btn" href="mailto:infoaveron@gmail.com">Email: infoaveron@gmail.com</a>
+            <a class="btn" href="https://www.linkedin.com/company/averon-search-partners" target="_blank" rel="noopener">LinkedIn</a>
             <a class="btn" href="https://calendly.com/prasanashok/30min" target="_blank" rel="noopener">Book a Call</a>
           </div>
 
@@ -535,11 +517,20 @@
           <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center">
             <div>
               <strong style="font-family:var(--serif); letter-spacing:.4px;">Averon Search Partners</strong><br>
-              <span class="muted">Executive Search • Senior Talent Advisory</span>
+              <span class="muted">Executive Search • Senior Talent Advisory</span><br>
+              <span class="muted">Averon Holding Co.</span>
             </div>
             <div class="muted"><a href="#top">Back to top ↑</a></div>
           </div>
-          <div style="margin-top:14px" class="muted">© <span id="year"></span> Averon Search Partners. All rights reserved.</div>
+
+          <div style="margin-top:14px" class="muted">
+            <span>© <span id="year"></span> Averon Search Partners. All rights reserved.</span>
+            <span style="display:block; margin-top:8px;">
+              <a href="https://www.linkedin.com/company/averon-search-partners" target="_blank" rel="noopener">LinkedIn</a>
+              <span style="opacity:.55;"> • </span>
+              <a href="mailto:infoaveron@gmail.com">infoaveron@gmail.com</a>
+            </span>
+          </div>
         </footer>
       </div>
     </div>
