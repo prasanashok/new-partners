@@ -1,178 +1,655 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Client Portal — Averon</title>
-
-  <link rel="icon" type="image/png" sizes="1024x1024" href="/Averon-Search-Partners-Logo.png">
-  <meta name="theme-color" content="#070B14">
-
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Averon Client Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg0:#070B14;
-      --bg1:#0B1220;
-      --panel:rgba(255,255,255,.04);
-      --panel2:rgba(255,255,255,.06);
-      --line:rgba(255,255,255,.12);
-      --text:#EEF3FF;
-      --muted:#B7C4E3;
-      --gold:#C7A35B;
-      --shadow: 0 22px 60px rgba(0,0,0,.45);
-      --radius: 18px;
-      --radius2: 24px;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
-      --max: 1120px;
+    :root {
+      --bg: #08080a; --bg2: #0e0e12; --bg3: #141418; --bg4: #1c1c22;
+      --gold: #b8965a; --gold-light: #d4b07a; --gold-dim: rgba(184,150,90,0.10); --gold-border: rgba(184,150,90,0.22);
+      --text: #e8e4db; --muted: #7a766e; --muted2: #3a3830; --white: #f5f1e8;
+      --green: #4a9970; --green-dim: rgba(74,153,112,0.12);
+      --red: #b05a5a; --red-dim: rgba(176,90,90,0.12);
+      --amber: #b8965a; --blue: #5a84b8; --blue-dim: rgba(90,132,184,0.12);
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
-      background:
-        radial-gradient(1200px 520px at 12% 8%, rgba(199,163,91,.12), transparent 55%),
-        radial-gradient(900px 480px at 90% 18%, rgba(238,243,255,.08), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-    }
-    .container{max-width:var(--max); margin:0 auto; padding:0 20px}
-    a{color:inherit; text-decoration:none}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; cursor: default; }
 
-    .nav{
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(12px);
-      background: rgba(7,11,20,.55);
-      border-bottom: 1px solid rgba(255,255,255,.08);
+    /* ─── LOGIN SCREEN ─── */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 1000;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
     }
-    .nav-inner{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:14px; padding:14px 0;
+    .login-box {
+      width: 420px; padding: 56px 48px;
+      border: 1px solid var(--gold-border);
+      background: var(--bg2);
     }
-    .brand strong{font-family:var(--serif); letter-spacing:.6px; font-size:16px}
-    .brand span{display:block; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color: rgba(199,163,91,.95); margin-top:2px}
+    .login-brand { margin-bottom: 40px; }
+    .login-brand-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--white); letter-spacing: 0.04em; }
+    .login-brand-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.22em; color: var(--gold); margin-top: 4px; }
+    .login-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: var(--white); margin-bottom: 32px; line-height: 1.2; }
+    .login-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 8px; display: block; }
+    .login-input {
+      width: 100%; background: var(--bg3); border: 1px solid var(--muted2);
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.92rem;
+      padding: 13px 16px; outline: none; margin-bottom: 18px;
+      transition: border-color 0.25s;
+    }
+    .login-input:focus { border-color: var(--gold-border); }
+    .login-input::placeholder { color: var(--muted); }
+    .login-btn {
+      width: 100%; padding: 14px; background: var(--gold); color: #08080a;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer;
+      transition: background 0.25s;
+    }
+    .login-btn:hover { background: var(--gold-light); }
+    .login-error { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--red); margin-top: 12px; display: none; }
+    .login-hint { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); margin-top: 20px; text-align: center; letter-spacing: 0.08em; }
+    .login-back { display: block; text-align: center; margin-top: 16px; font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); text-decoration: none; letter-spacing: 0.1em; transition: color 0.2s; }
+    .login-back:hover { color: var(--gold-light); }
 
-    .btn{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 14px; border-radius:999px;
-      border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
-      box-shadow: 0 10px 25px rgba(0,0,0,.25);
-      transition: transform .15s ease, border-color .15s ease;
-      font-weight:600;
-      cursor:pointer;
-    }
-    .btn:hover{transform: translateY(-1px); border-color: rgba(199,163,91,.55)}
-    .btn.primary{
-      border-color: rgba(199,163,91,.5);
-      background:linear-gradient(180deg, rgba(199,163,91,.22), rgba(255,255,255,.04));
-    }
+    /* ─── PORTAL LAYOUT ─── */
+    #portal { display: none; min-height: 100vh; }
 
-    main{padding: 28px 0 60px}
-    .grid{display:grid; gap:18px; grid-template-columns: 1.3fr .7fr}
-    .card{
-      background: linear-gradient(180deg, var(--panel2), var(--panel));
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      padding: 18px;
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 240px;
+      background: var(--bg2); border-right: 1px solid var(--muted2);
+      display: flex; flex-direction: column; z-index: 50;
     }
-    h1{margin:0; font-family:var(--serif); font-size: 30px; letter-spacing:.3px}
-    .muted{color:var(--muted)}
-    .kicker{font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:rgba(199,163,91,.9)}
-
-    .list{margin-top:12px; display:grid; gap:10px}
-    .item{
-      padding:12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
+    .sidebar-logo { padding: 28px 24px; border-bottom: 1px solid var(--muted2); }
+    .sidebar-logo-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--white); }
+    .sidebar-logo-tag { font-family: 'DM Mono', monospace; font-size: 0.54rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); margin-top: 3px; }
+    .sidebar-client { padding: 20px 24px; border-bottom: 1px solid var(--muted2); }
+    .sidebar-client-label { font-family: 'DM Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 6px; }
+    .sidebar-client-name { font-size: 0.9rem; color: var(--white); font-weight: 500; }
+    .sidebar-nav { flex: 1; padding: 16px 0; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 24px; font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+      cursor: pointer; transition: color 0.2s, background 0.2s; border: none; background: none; width: 100%; text-align: left;
     }
-    .item strong{display:block}
-    .item span{display:block; margin-top:3px; font-size: 12px; color: rgba(183,196,227,.92)}
+    .nav-item svg { flex-shrink: 0; }
+    .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-item.active { color: var(--gold-light); background: var(--gold-dim); }
+    .nav-item .badge {
+      margin-left: auto; font-size: 0.58rem; padding: 2px 7px;
+      border: 1px solid var(--red); color: var(--red); border-radius: 2px;
+    }
+    .sidebar-foot { padding: 20px 24px; border-top: 1px solid var(--muted2); }
+    .sidebar-logout { font-family: 'DM Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); cursor: pointer; background: none; border: none; transition: color 0.2s; display: flex; align-items: center; gap: 8px; }
+    .sidebar-logout:hover { color: var(--red); }
 
-    @media (max-width: 980px){
-      .grid{grid-template-columns: 1fr}
+    /* MAIN */
+    .main { margin-left: 240px; padding: 40px 48px; min-height: 100vh; }
+    .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 40px; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 300; color: var(--white); line-height: 1.1; }
+    .page-subtitle { font-family: 'DM Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--gold); margin-bottom: 8px; }
+    .page-date { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+
+    /* TAB PANELS */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* OVERVIEW CARDS */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-bottom: 36px; }
+    .stat-card { background: var(--bg2); border: 1px solid var(--muted2); padding: 28px 24px; }
+    .stat-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted); margin-bottom: 12px; }
+    .stat-val { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 600; line-height: 1; color: var(--white); }
+    .stat-val.gold { color: var(--gold-light); }
+    .stat-val.green { color: var(--green); }
+    .stat-val.red { color: var(--red); }
+    .stat-sub { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); margin-top: 8px; }
+
+    /* TABLE */
+    .table-wrap { background: var(--bg2); border: 1px solid var(--muted2); margin-bottom: 24px; }
+    .table-header { padding: 20px 28px; border-bottom: 1px solid var(--muted2); display: flex; align-items: center; justify-content: space-between; }
+    .table-title { font-family: 'DM Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--gold); }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-family: 'DM Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); padding: 14px 28px; text-align: left; border-bottom: 1px solid var(--muted2); font-weight: 400; }
+    td { padding: 16px 28px; font-size: 0.9rem; color: var(--text); border-bottom: 1px solid rgba(58,56,48,0.5); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.015); }
+
+    /* BADGES */
+    .badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; border: 1px solid; }
+    .badge-paid { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+    .badge-pending { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .badge-overdue { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+    .badge-active { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
+    .badge-screening { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .badge-shortlisted { border-color: #7a5ab8; color: #a07ae0; background: rgba(160,122,224,0.1); }
+    .badge-offer { border-color: var(--green); color: var(--green); background: var(--green-dim); }
+    .badge-closed { border-color: var(--muted); color: var(--muted); background: rgba(122,118,110,0.08); }
+
+    /* PROGRESS BAR */
+    .progress-wrap { background: var(--muted2); height: 4px; border-radius: 0; overflow: hidden; width: 120px; }
+    .progress-bar { height: 100%; background: var(--gold); transition: width 0.6s; }
+
+    /* CANDIDATES */
+    .candidate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2px; }
+    .candidate-card { background: var(--bg2); border: 1px solid var(--muted2); padding: 28px; transition: border-color 0.3s; }
+    .candidate-card:hover { border-color: var(--gold-border); }
+    .candidate-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .candidate-role { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--gold); letter-spacing: 0.08em; margin-bottom: 14px; }
+    .candidate-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+    .candidate-meta-row { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--muted); }
+    .candidate-meta-row svg { color: var(--gold); flex-shrink: 0; }
+    .candidate-actions { display: flex; gap: 8px; margin-top: 16px; }
+    .cand-btn { font-family: 'DM Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 7px 14px; border: 1px solid var(--muted2); color: var(--muted); background: none; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+    .cand-btn:hover { border-color: var(--gold-border); color: var(--gold-light); }
+    .cand-btn.primary { background: var(--gold-dim); border-color: var(--gold-border); color: var(--gold-light); }
+
+    /* NOTES */
+    .notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .note-card { background: var(--bg2); border: 1px solid var(--muted2); padding: 28px; transition: border-color 0.3s; }
+    .note-card:hover { border-color: var(--gold-border); }
+    .note-date { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 10px; }
+    .note-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; color: var(--white); margin-bottom: 10px; }
+    .note-body { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+    .note-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 9px; border: 1px solid var(--muted2); color: var(--muted); margin-top: 14px; }
+
+    /* SECTION DIVIDER */
+    .section-head { font-family: 'DM Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 16px; margin-top: 36px; }
+
+    /* AMOUNT */
+    .amount { font-family: 'DM Mono', monospace; }
+    .amount.owed { color: var(--red); }
+    .amount.paid { color: var(--green); }
+
+    /* TOP BAR */
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid var(--muted2); }
+    .topbar-greeting { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300; color: var(--muted); }
+    .topbar-greeting strong { color: var(--white); font-weight: 600; }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .topbar-date { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.1em; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1100px) { .stat-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 768px) {
+      .sidebar { width: 200px; }
+      .main { margin-left: 200px; padding: 24px; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .notes-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="nav">
-    <div class="container nav-inner">
-      <div class="brand">
-        <strong>Averon Search Partners</strong>
-        <span>Client Portal</span>
+
+  <!-- ══════════════════ LOGIN ══════════════════ -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="login-brand">
+        <div class="login-brand-name">Averon Search Partners</div>
+        <div class="login-brand-tag">Client Portal</div>
       </div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end">
-        <a class="btn" href="/index.html">Main Site</a>
-        <button class="btn primary" id="logoutBtn" type="button">Logout</button>
-      </div>
+      <div class="login-title">Sign in to<br>your account.</div>
+      <label class="login-label">Email Address</label>
+      <input class="login-input" id="loginEmail" type="email" placeholder="you@company.com">
+      <label class="login-label">Password</label>
+      <input class="login-input" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="login-btn" onclick="doLogin()">Sign In →</button>
+      <div class="login-error" id="loginError">Invalid credentials. Please try again.</div>
+      <div class="login-hint">Demo: any email · password: <strong style="color:var(--gold)">averon2026</strong></div>
+      <a class="login-back" href="index.html">← Back to Averon Search Partners</a>
     </div>
   </div>
 
-  <main>
-    <div class="container">
-      <div class="card">
-        <div class="kicker">Welcome</div>
-        <h1 style="margin-top:8px">Dashboard</h1>
-        <p class="muted" style="margin-top:8px">
-          Logged in as <span id="user" style="color:rgba(238,243,255,.92); font-weight:700"></span>.
-          (Prototype portal)
-        </p>
+  <!-- ══════════════════ PORTAL ══════════════════ -->
+  <div id="portal">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-name">Averon</div>
+        <div class="sidebar-logo-tag">Client Portal</div>
+      </div>
+      <div class="sidebar-client">
+        <div class="sidebar-client-label">Logged in as</div>
+        <div class="sidebar-client-name" id="clientName">—</div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" onclick="showTab('overview', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Overview
+        </button>
+        <button class="nav-item" onclick="showTab('invoices', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Invoices
+          <span class="badge" id="overdueCount" style="display:none">!</span>
+        </button>
+        <button class="nav-item" onclick="showTab('searches', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Active Searches
+        </button>
+        <button class="nav-item" onclick="showTab('candidates', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Candidates
+        </button>
+        <button class="nav-item" onclick="showTab('notes', this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          Notes & Docs
+        </button>
+      </nav>
+      <div class="sidebar-foot">
+        <button class="sidebar-logout" onclick="doLogout()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-greeting">Welcome back, <strong id="topbarName">—</strong></div>
+        <div class="topbar-right">
+          <div class="topbar-date" id="topbarDate"></div>
+        </div>
       </div>
 
-      <div style="height:18px"></div>
+      <!-- OVERVIEW TAB -->
+      <div class="tab-panel active" id="tab-overview">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">Active Searches</div>
+            <div class="stat-val gold">2</div>
+            <div class="stat-sub">1 in shortlist phase</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Candidates in Pipeline</div>
+            <div class="stat-val">6</div>
+            <div class="stat-sub">Across 2 mandates</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Amount Outstanding</div>
+            <div class="stat-val red">$18,500</div>
+            <div class="stat-sub">1 invoice overdue</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Paid (2026)</div>
+            <div class="stat-val green">$24,000</div>
+            <div class="stat-sub">2 invoices settled</div>
+          </div>
+        </div>
 
-      <div class="grid">
-        <section class="card">
-          <div class="kicker">Updates</div>
-          <div class="list">
-            <div class="item">
-              <strong>Search status</strong>
-              <span>Kickoff → Market Map → Outreach → Shortlist → Close</span>
+        <div class="section-head">Current Search Status</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>Stage</th><th>Progress</th><th>Last Update</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Chief Revenue Officer</strong></td>
+                <td><span class="badge badge-shortlisted">Shortlist</span></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="progress-wrap"><div class="progress-bar" style="width:75%"></div></div>
+                    <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted)">75%</span>
+                  </div>
+                </td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Feb 24, 2026</td>
+              </tr>
+              <tr>
+                <td><strong>VP Finance</strong></td>
+                <td><span class="badge badge-screening">Screening</span></td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="progress-wrap"><div class="progress-bar" style="width:35%"></div></div>
+                    <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted)">35%</span>
+                  </div>
+                </td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Feb 26, 2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-head">Recent Invoices</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Invoice</th><th>Description</th><th>Amount</th><th>Due</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr>
+                <td style="font-family:'DM Mono',monospace;font-size:0.78rem;">INV-2026-003</td>
+                <td>CRO Search — Shortlist Delivery</td>
+                <td><span class="amount owed">$12,500</span></td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--red)">Feb 15, 2026</td>
+                <td><span class="badge badge-overdue">Overdue</span></td>
+              </tr>
+              <tr>
+                <td style="font-family:'DM Mono',monospace;font-size:0.78rem;">INV-2026-004</td>
+                <td>VP Finance Search — Initiation</td>
+                <td><span class="amount owed">$6,000</span></td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;">Mar 10, 2026</td>
+                <td><span class="badge badge-pending">Pending</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- INVOICES TAB -->
+      <div class="tab-panel" id="tab-invoices">
+        <div style="margin-bottom:32px;">
+          <div class="page-subtitle">Billing</div>
+          <div class="page-title">Invoices &amp; Payments</div>
+        </div>
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="stat-card"><div class="stat-label">Total Billed</div><div class="stat-val gold">$42,500</div></div>
+          <div class="stat-card"><div class="stat-label">Paid</div><div class="stat-val green">$24,000</div></div>
+          <div class="stat-card"><div class="stat-label">Outstanding</div><div class="stat-val red">$18,500</div></div>
+        </div>
+        <div class="table-wrap" style="margin-top:8px;">
+          <div class="table-header">
+            <span class="table-title">All Invoices</span>
+          </div>
+          <table>
+            <thead><tr><th>Invoice #</th><th>Description</th><th>Issued</th><th>Due</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr>
+                <td style="font-family:'DM Mono',monospace;font-size:0.78rem;">INV-2025-001</td>
+                <td>CRO Search — Engagement Retainer</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Nov 1, 2025</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Nov 15, 2025</td>
+                <td><span class="amount paid">$12,000</span></td>
+                <td><span class="badge badge-paid">Paid</span></td>
+              </tr>
+              <tr>
+                <td style="font-family:'DM Mono',monospace;font-size:0.78rem;">INV-2026-002</td>
+                <td>CRO Search — Market Map Delivery</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Jan 8, 2026</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Jan 22, 2026</td>
+                <td><span class="amount paid">$12,000</span></td>
+                <td><span class="badge badge-paid">Paid</span></td>
+              </tr>
+              <tr>
+                <td style="font-family:'DM Mono',monospace;font-size:0.78rem;">INV-2026-003</td>
+                <td>CRO Search — Shortlist Delivery</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Feb 1, 2026</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--red);font-weight:500">Feb 15, 2026</td>
+                <td><span class="amount owed">$12,500</span></td>
+                <td><span class="badge badge-overdue">Overdue</span></td>
+              </tr>
+              <tr>
+                <td style="font-family:'DM Mono',monospace;font-size:0.78rem;">INV-2026-004</td>
+                <td>VP Finance Search — Initiation Retainer</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Feb 20, 2026</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">Mar 10, 2026</td>
+                <td><span class="amount owed">$6,000</span></td>
+                <td><span class="badge badge-pending">Pending</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);margin-top:16px;letter-spacing:0.08em;">For payment inquiries contact <a href="mailto:infoaveron@gmail.com" style="color:var(--gold);text-decoration:none;">infoaveron@gmail.com</a></p>
+      </div>
+
+      <!-- SEARCHES TAB -->
+      <div class="tab-panel" id="tab-searches">
+        <div style="margin-bottom:32px;">
+          <div class="page-subtitle">Mandates</div>
+          <div class="page-title">Active Searches</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>Stage</th><th>Candidates Screened</th><th>Shortlist</th><th>Progress</th><th>Started</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div style="font-weight:500;color:var(--white)">Chief Revenue Officer</div>
+                  <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:3px;">B2B SaaS · $220–280k base</div>
+                </td>
+                <td><span class="badge badge-shortlisted">Shortlist Ready</span></td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.82rem;">38</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.82rem;color:var(--gold)">4 of 5</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="progress-wrap" style="width:160px;"><div class="progress-bar" style="width:75%"></div></div>
+                    <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted)">75%</span>
+                  </div>
+                </td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted)">Oct 28, 2025</td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="font-weight:500;color:var(--white)">VP Finance</div>
+                  <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:3px;">PE-backed · $180–220k base</div>
+                </td>
+                <td><span class="badge badge-screening">Market Mapping</span></td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.82rem;">12</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.82rem;color:var(--muted)">0 of 4</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="progress-wrap" style="width:160px;"><div class="progress-bar" style="width:35%"></div></div>
+                    <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted)">35%</span>
+                  </div>
+                </td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted)">Feb 3, 2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-head" style="margin-top:40px;">Past Engagements</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Role</th><th>Outcome</th><th>Placed</th><th>Completed</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div style="font-weight:500;color:var(--white)">COO</div></td>
+                <td><span class="badge badge-offer">Placed</span></td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.82rem;color:var(--green)">Jordan M.</td>
+                <td style="font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted)">Sep 2025</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CANDIDATES TAB -->
+      <div class="tab-panel" id="tab-candidates">
+        <div style="margin-bottom:32px;">
+          <div class="page-subtitle">Pipeline</div>
+          <div class="page-title">Candidate Shortlists</div>
+        </div>
+
+        <div class="section-head">CRO Search — 4 Candidates</div>
+        <div class="candidate-grid">
+          <div class="candidate-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div class="candidate-name">Alexandra Chen</div>
+              <span class="badge badge-shortlisted">Shortlisted</span>
             </div>
-            <div class="item">
-              <strong>Candidate shortlist</strong>
-              <span>3–6 candidates appear here (add your data later)</span>
+            <div class="candidate-role">VP Sales → CRO · 14 yrs exp</div>
+            <div class="candidate-meta">
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> New York, NY</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> Ex-Salesforce, Gong</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> $265k base expected</div>
             </div>
-            <div class="item">
-              <strong>Documents</strong>
-              <span>Add links to PDFs / drive folders / NDA docs</span>
+            <div class="candidate-actions">
+              <button class="cand-btn primary">View Profile</button>
+              <button class="cand-btn">Schedule</button>
+              <button class="cand-btn">Notes</button>
             </div>
           </div>
-        </section>
 
-        <aside class="card">
-          <div class="kicker">Contact</div>
-          <p class="muted" style="margin-top:10px">
-            <a href="mailto:infoaveron@gmail.com">infoaveron@gmail.com</a><br>
-            <a href="https://www.linkedin.com/company/averon-search-partners" target="_blank" rel="noopener">LinkedIn</a><br>
-            <span style="opacity:.9">Averon Holding Co.</span>
-          </p>
+          <div class="candidate-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div class="candidate-name">Marcus Webb</div>
+              <span class="badge badge-offer">Interview Set</span>
+            </div>
+            <div class="candidate-role">CRO · Series B–D specialist</div>
+            <div class="candidate-meta">
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Austin, TX (open to relocate)</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> Ex-HubSpot, ZoomInfo</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> $250–270k base expected</div>
+            </div>
+            <div class="candidate-actions">
+              <button class="cand-btn primary">View Profile</button>
+              <button class="cand-btn">Schedule</button>
+              <button class="cand-btn">Notes</button>
+            </div>
+          </div>
 
-          <div style="height:12px"></div>
+          <div class="candidate-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div class="candidate-name">Priya Nair</div>
+              <span class="badge badge-shortlisted">Shortlisted</span>
+            </div>
+            <div class="candidate-role">Head of Revenue · $40M ARR</div>
+            <div class="candidate-meta">
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> San Francisco, CA</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> Ex-Stripe, Brex</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> $255k base expected</div>
+            </div>
+            <div class="candidate-actions">
+              <button class="cand-btn primary">View Profile</button>
+              <button class="cand-btn">Schedule</button>
+              <button class="cand-btn">Notes</button>
+            </div>
+          </div>
 
-          <a class="btn" href="mailto:infoaveron@gmail.com?subject=Portal%20Support%20Request">Request Support</a>
-        </aside>
+          <div class="candidate-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div class="candidate-name">Daniel Frost</div>
+              <span class="badge badge-screening">Under Review</span>
+            </div>
+            <div class="candidate-role">VP Revenue Operations → CRO</div>
+            <div class="candidate-meta">
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Chicago, IL</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> Ex-Outreach, Salesloft</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> $240k base expected</div>
+            </div>
+            <div class="candidate-actions">
+              <button class="cand-btn primary">View Profile</button>
+              <button class="cand-btn">Schedule</button>
+              <button class="cand-btn">Notes</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head" style="margin-top:40px;">VP Finance Search — 2 Early Screens</div>
+        <div class="candidate-grid">
+          <div class="candidate-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div class="candidate-name">Sarah Kim</div>
+              <span class="badge badge-screening">Early Screen</span>
+            </div>
+            <div class="candidate-role">Director Finance → VP · 11 yrs exp</div>
+            <div class="candidate-meta">
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Boston, MA</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> PE-backed SaaS background</div>
+            </div>
+            <div class="candidate-actions">
+              <button class="cand-btn primary">View Profile</button>
+              <button class="cand-btn">Notes</button>
+            </div>
+          </div>
+          <div class="candidate-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div class="candidate-name">Tom Alvarez</div>
+              <span class="badge badge-screening">Early Screen</span>
+            </div>
+            <div class="candidate-role">CFO (SMB) · FP&A expertise</div>
+            <div class="candidate-meta">
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Remote (EST)</div>
+              <div class="candidate-meta-row"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> Growth / venture track record</div>
+            </div>
+            <div class="candidate-actions">
+              <button class="cand-btn primary">View Profile</button>
+              <button class="cand-btn">Notes</button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </main>
+
+      <!-- NOTES TAB -->
+      <div class="tab-panel" id="tab-notes">
+        <div style="margin-bottom:32px;">
+          <div class="page-subtitle">Updates</div>
+          <div class="page-title">Notes &amp; Documents</div>
+        </div>
+        <div class="notes-grid">
+          <div class="note-card">
+            <div class="note-date">Feb 26, 2026</div>
+            <div class="note-title">CRO Search — Shortlist Debrief</div>
+            <div class="note-body">Final shortlist of 4 delivered. Alexandra Chen and Marcus Webb are the top two recommendations based on team fit and revenue scale. Marcus has confirmed availability for a final round week of March 3. Recommend scheduling back-to-back on the same day for calibration.</div>
+            <span class="note-tag">CRO Search</span>
+          </div>
+          <div class="note-card">
+            <div class="note-date">Feb 20, 2026</div>
+            <div class="note-title">VP Finance — Kickoff Notes</div>
+            <div class="note-body">Alignment call completed. Key priorities confirmed: PE experience required, comfort with board reporting, and ideally a candidate who has operated through a transaction. Starting with 3 target segments: PE-backed SaaS, growth-stage fintech, and professional services. First batch of screens expected by March 7.</div>
+            <span class="note-tag">VP Finance Search</span>
+          </div>
+          <div class="note-card">
+            <div class="note-date">Feb 10, 2026</div>
+            <div class="note-title">CRO — Interview Feedback Summary</div>
+            <div class="note-body">Three candidates completed first-round interviews. Summary: Alexandra — strong strategic vision, team liked her directness. Priya — excellent fintech pedigree, slight concern on enterprise sales exposure. Daniel — solid ops background, may need more CRO-level experience. Marcus interview scheduled for Feb 24.</div>
+            <span class="note-tag">CRO Search</span>
+          </div>
+          <div class="note-card">
+            <div class="note-date">Jan 15, 2026</div>
+            <div class="note-title">Scorecard: CRO Role Requirements</div>
+            <div class="note-body">Must-haves agreed: 3+ yrs as CRO or Head of Revenue, $20M+ ARR managed, experience scaling from $20M to $50M+, strong enterprise motion, comfortable owning full revenue stack (sales + CS + RevOps). Compensation range: $250–280k base + equity. Start date flexibility preferred.</div>
+            <span class="note-tag">Alignment Doc</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
 
   <script>
-    // Simple "gate" for demo purposes
-    if (localStorage.getItem("averon_authed") !== "1") {
-      window.location.href = "/login.html";
+    // ── Demo credentials ──
+    const DEMO_PASS = 'averon2026';
+
+    function doLogin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass  = document.getElementById('loginPass').value;
+      const err   = document.getElementById('loginError');
+      if (!email || pass !== DEMO_PASS) {
+        err.style.display = 'block';
+        return;
+      }
+      err.style.display = 'none';
+      const name = email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+      document.getElementById('clientName').textContent = name;
+      document.getElementById('topbarName').textContent = name;
+      document.getElementById('loginScreen').style.opacity = '0';
+      document.getElementById('loginScreen').style.transition = 'opacity 0.4s';
+      setTimeout(() => {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('portal').style.display = 'block';
+      }, 400);
     }
 
-    document.getElementById("user").textContent = localStorage.getItem("averon_user") || "client";
+    function doLogout() {
+      document.getElementById('portal').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('loginScreen').style.opacity = '1';
+      document.getElementById('loginEmail').value = '';
+      document.getElementById('loginPass').value = '';
+    }
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("averon_authed");
-      localStorage.removeItem("averon_user");
-      window.location.href = "/login.html";
-    });
+    function showTab(name, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Date
+    const d = new Date();
+    document.getElementById('topbarDate').textContent = d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   </script>
 </body>
 </html>
