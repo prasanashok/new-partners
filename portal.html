@@ -52,6 +52,15 @@
     .login-btn:hover { background: var(--gold-light); }
     .login-error { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--red); margin-top: 12px; display: none; }
     .login-hint { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); margin-top: 20px; text-align: center; letter-spacing: 0.08em; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-8px); }
+      40%      { transform: translateX(8px); }
+      60%      { transform: translateX(-5px); }
+      80%      { transform: translateX(5px); }
+    }
+    .login-box.shake { animation: shake 0.4s ease; }
     .login-back { display: block; text-align: center; margin-top: 16px; font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); text-decoration: none; letter-spacing: 0.1em; transition: color 0.2s; }
     .login-back:hover { color: var(--gold-light); }
 
@@ -198,7 +207,7 @@
       <input class="login-input" id="loginPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
       <button class="login-btn" onclick="doLogin()">Sign In →</button>
       <div class="login-error" id="loginError">Invalid credentials. Please try again.</div>
-      <div class="login-hint">Demo: any email · password: <strong style="color:var(--gold)">averon2026</strong></div>
+      <!-- hint removed for clean look -->
       <a class="login-back" href="index.html">← Back to Averon Search Partners</a>
     </div>
   </div>
@@ -618,6 +627,13 @@
       const err   = document.getElementById('loginError');
       if (!email || pass !== DEMO_PASS) {
         err.style.display = 'block';
+        const box = document.querySelector('.login-box');
+        box.classList.remove('shake');
+        void box.offsetWidth; // reflow to restart animation
+        box.classList.add('shake');
+        setTimeout(() => box.classList.remove('shake'), 500);
+        document.getElementById('loginPass').value = '';
+        document.getElementById('loginPass').focus();
         return;
       }
       err.style.display = 'none';
